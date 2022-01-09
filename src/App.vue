@@ -8,7 +8,7 @@
             <v-list nav rounded>
                 <v-list-item :to="{path: '/about'}">
                     <v-list-item-icon>
-                        <v-icon class="ml-1">mdi-help</v-icon>
+                        <v-icon class="ml-2">mdi-help-circle</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
                         About
@@ -16,10 +16,10 @@
                 </v-list-item>
                 <v-list-item :to="{path: '/'}">
                     <v-list-item-icon>
-                        <v-icon class="ml-1">mdi-subway-variant</v-icon>
+                        <v-icon class="ml-2">mdi-bus-clock</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
-                        Transit
+                        Departures
                     </v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -29,7 +29,6 @@
             app 
             clipped-left
             src="./assets/background.jpg"
-            fade-img-on-scroll
         >
             <template v-slot:img="{ props }">
                 <v-img 
@@ -66,6 +65,20 @@
             <router-view/>
         </v-main>
 
+        <v-footer app padless>
+            <v-container class="pb-1 pt-1">
+                <v-layout class="text-center" align-content-center>
+                    <v-flex xs12>
+                        <span class="caption font-weight-bold">
+                            &copy;{{ $moment().format('YYYY') }} Skedaddle - Powered By 
+                            <a href="https://www.metrotransit.org/nextrip">NexTrip</a>, a 
+                            <a href="https://www.metrotransit.org/">MetroTransit</a> Service
+                        </span>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-footer>
+
     </v-app>
 </template>
 
@@ -77,6 +90,28 @@
     .app-bar-background .v-image__image {
         filter: blur(1px);
         transform: scale(1.03);
+    }
+    .v-card__text, .v-card__title {
+        word-break: normal !important;
+    }
+
+    .pulse-icon {
+        animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.1;
+        }
+        40% {
+            opacity: 1;
+        }
+        60% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.1;
+        }
     }
 </style>
 
