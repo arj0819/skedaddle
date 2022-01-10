@@ -11,6 +11,16 @@
                 Clear this result
             </v-btn>
         </v-layout>
+        <v-snackbar :key="3"
+            v-model="showError" app
+            rounded="pill" top timeout="1500"
+            text color="red"
+        >
+            <v-icon color="red">mdi-alert-circle</v-icon>
+            <span class="ml-3 subtitle-1 font-weight-bold">
+                Could not locate departures. Please try again.
+            </span>
+        </v-snackbar>
     </v-fade-transition>
 </template>
 
@@ -79,11 +89,17 @@ const DeparturesRepository = RepositoryFactory.build(FactoryKeys.DEPARTURES);
                 .then((response) => {
                     this.nexTripResult = response.data
                 })
+                .catch(() => {
+                    this.showError = true;
+                })
             },
             updateDeparturesByStopNumber(stopNumber) {
                 DeparturesRepository.getDeparturesByStopNumber(stopNumber)
                 .then((response) => {
                     this.nexTripResult = response.data
+                })
+                .catch(() => {
+                    this.showError = true;
                 })
             },
             clearResult() {
@@ -93,6 +109,7 @@ const DeparturesRepository = RepositoryFactory.build(FactoryKeys.DEPARTURES);
         },
         data: () => ({
             nexTripResult: {},
+            showError: false
         }),
 
     }

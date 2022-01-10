@@ -8,7 +8,7 @@
                         Find your next departure. 
                     </v-card-title>
                     <v-card-text class="text-center pb-1">
-                        <v-btn-toggle 
+                        <v-btn-toggle data-test-id="findByDepartureToggle"
                             v-model="findDeparturesByRoute" 
                             color="purple accent-2" 
                             rounded mandatory
@@ -100,6 +100,16 @@
                 </v-fade-transition>
             </v-flex>
             <v-spacer/>
+            <v-snackbar
+                v-model="showError" app
+                rounded="pill" top timeout="1500"
+                text color="red"
+            >
+                <v-icon color="red">mdi-alert-circle</v-icon>
+                <span class="ml-3 subtitle-1 font-weight-bold">
+                    {{ errorMessage }}
+                </span>
+            </v-snackbar>
         </v-layout>
     </v-container>
 
@@ -154,9 +164,19 @@
                         //
                     }
                 })
+                .catch(() => {
+                    this.errorMessage = 'Could not get routes. Please try again'
+                    this.showError = true;
+                })
         },
 
         methods: {
+            /**
+             * Clears dependenant local state values, then
+             * Updates local selectedRoute and triggers API
+             * call to get the associated directions if necessary.
+             * @param event The value to update selectedRoute to
+             */
             updateSelectedRoute(event) {
                 this.selectedDirection = '';
                 this.selectedStop = '';
@@ -169,8 +189,18 @@
                         .then((response) => {
                             this.directions = response.data;
                         })
+                        .catch(() => {
+                            this.errorMessage = 'Could not get directions. Please try again'
+                            this.showError = true;
+                        })
                 }
             },
+            /**
+             * Clears dependenant local state values, then
+             * Updates local selectedDirection and triggers API
+             * call to get the associated stops if necessary.
+             * @param event The value to update selectedDirection to
+             */
             updateSelectedDirection(event) {
                 this.selectedStop = '';
                 this.nexTripResult = {};
@@ -182,8 +212,18 @@
                         .then((response) => {
                             this.stops = response.data;
                         })
+                        .catch(() => {
+                            this.errorMessage = 'Could not get stops. Please try again'
+                            this.showError = true;
+                        })
                 }
             },
+            /**
+             * Clears dependenant local state values, then
+             * Updates local selectedStop and triggers a route
+             * navigation to display resulting departures by route.
+             * @param event The value to update selectedStop to
+             */
             updateSelectedStop(event) {
                 this.nexTripResult = {};
                 if (event === null) {
@@ -197,6 +237,11 @@
                     );
                 }
             },
+            /**
+             * Clears dependenant local state values, then
+             * Updates local searchForStopNumber.
+             * @param stopNumber The value to update searchForStopNumber to, defaults to null
+             */
             updateSearchForStopNumber(stopNumber = null) {
                 this.nexTripResult = {};
                 this.searchForStopNumber = stopNumber;
@@ -207,12 +252,25 @@
                     //
                 }
             },
+            /**
+             * If local state searchForStopNumber is valid, 
+             * triggers a route navigation to display 
+             * resulting departures by stop number.
+             */
             updateDeparturesByStopNumber() {
                 if (this.searchForStopNumber === null || this.searchForStopNumber === '') {
                     return;
                 }
                 this.navigateToDeparturesByStopNumber(this.searchForStopNumber);
             },
+            /**
+             * Updates all local state to fill in dropdowns
+             * provided by route parameters, making
+             * necessary API calls along the way.
+             * @param routeId
+             * @param directionId
+             * @param placeCode
+             */
             updateDeparturesByRoute(routeId, directionId, placeCode) {
                 this.nexTripResult = {};
                 this.selectedRoute = this.routes.filter((route) => {
@@ -234,8 +292,23 @@
                                     return stop.place_code === placeCode
                                 })[0];
                             })
-                    })            
+                            .catch(() => {
+                                this.errorMessage = 'Could not get place code. Please try again'
+                                this.showError = true;
+                            })
+                    })      
+                    .catch(() => {
+                        this.errorMessage = 'Could not get direction. Please try again'
+                        this.showError = true;
+                    })      
             },
+            /**
+             * Pushes a route navigation to the departures
+             * by route, defined by the parameters.
+             * @param routeId
+             * @param directionId
+             * @param placeCode
+             */
             navigateToDeparturesByRoute(routeId, directionId, placeCode) {
                 if (`/departures/${routeId}/${directionId}/${placeCode}` !== this.$route.path) {
                     this.$router.push({
@@ -248,6 +321,11 @@
                     })
                 }
             },
+            /**
+             * Pushes a route navigation to the departures
+             * by stopNumber
+             * @param stopNumber
+             */
             navigateToDeparturesByStopNumber(stopNumber) {
                 if (`/departures/${stopNumber}` !== this.$route.path) {
                     this.$router.push({
@@ -275,13 +353,11 @@
             selectedStop: '',
             searchForStopNumber: '',
             findDeparturesByRoute: true,
+            errorMessage: '',
+            showError: false,
             
             nexTripResult: {},
         }),
-
-        computed: {
-            
-        }
     }
 </script>
 
