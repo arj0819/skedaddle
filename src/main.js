@@ -12,7 +12,7 @@ moment.updateLocale('en', {
         past:   "%s ago",
         s  : 'a few seconds',
         ss : '%d seconds',
-        m:  "a minute",
+        m:  "1 minute",
         mm: "%d minutes",
         h:  "1 hour",
         hh: "%d hours",
@@ -20,9 +20,9 @@ moment.updateLocale('en', {
         dd: "%d days",
         w:  "a week",
         ww: "%d weeks",
-        M:  "a month",
+        M:  "1 month",
         MM: "%d months",
-        y:  "a year",
+        y:  "1 year",
         yy: "%d years"
     }
 });

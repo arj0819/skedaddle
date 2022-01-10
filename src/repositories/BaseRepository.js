@@ -7,13 +7,10 @@ let httpClient = axios.create({
 });
 
 function get(requestURL, config = {}) {
-    console.log(`GET: url -> ${API_BASE_URL + requestURL}`);
     return httpClient.get(requestURL, config);
 }
 
 function post(requestURL, data, config = {}) {
-    console.log(`POST: url -> ${API_BASE_URL + requestURL}`);
-    console.log(`      data -> ${JSON.stringify(data)}`);
     return httpClient.post(requestURL, data, config);
 }
 

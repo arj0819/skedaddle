@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import LogoButton from '../components/LogoButton'
+    import LogoButton from '../components/LogoButton.vue'
 
     export default {
         name: 'Home',

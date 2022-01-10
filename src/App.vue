@@ -14,7 +14,7 @@
                         About
                     </v-list-item-title>
                 </v-list-item>
-                <v-list-item :to="{path: '/'}">
+                <v-list-item :to="{path: '/departures'}">
                     <v-list-item-icon>
                         <v-icon class="ml-2">mdi-bus-clock</v-icon>
                     </v-list-item-icon>
@@ -62,7 +62,9 @@
         </v-app-bar>
 
         <v-main>
-            <router-view/>
+            <v-fade-transition leave-absolute>
+                <router-view/>
+            </v-fade-transition>
         </v-main>
 
         <v-footer app padless>
